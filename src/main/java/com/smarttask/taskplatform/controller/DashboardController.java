@@ -17,7 +17,7 @@ public class DashboardController {
         this.service = service;
     }
 
-    // GET /api/dashboard
+
     @GetMapping("/dashboard")
     public ResponseEntity<SuccessResponse<DashBoardDto>> getDashboard() {
 

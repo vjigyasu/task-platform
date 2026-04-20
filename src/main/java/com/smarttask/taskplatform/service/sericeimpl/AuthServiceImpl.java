@@ -3,6 +3,7 @@ package com.smarttask.taskplatform.service.sericeimpl;
 import com.smarttask.taskplatform.dto.AuthResponseDto;
 import com.smarttask.taskplatform.dto.LoginDto;
 import com.smarttask.taskplatform.entity.User;
+import com.smarttask.taskplatform.enums.Role;
 import com.smarttask.taskplatform.repository.UserRepository;
 import com.smarttask.taskplatform.service.AuthService;
 import com.smarttask.taskplatform.utils.JwtUtil;
@@ -37,6 +38,20 @@ public class AuthServiceImpl implements AuthService {
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid Password");
         }
+
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
+
+        return new AuthResponseDto(token, user.getRole().name());
+    }
+
+    @Override
+    public AuthResponseDto register(LoginDto dto) {
+        User user = new User();
+        user.setEmail(dto.getEmail());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setRole(Role.ROLE_USER);
+
+        userRepository.save(user);
 
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
 

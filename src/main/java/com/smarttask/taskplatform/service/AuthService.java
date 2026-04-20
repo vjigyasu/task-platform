@@ -5,4 +5,6 @@ import com.smarttask.taskplatform.dto.LoginDto;
 
 public interface AuthService {
     AuthResponseDto login(LoginDto dto);
+
+    AuthResponseDto register(LoginDto dto);
 }

@@ -5,6 +5,7 @@ import com.smarttask.taskplatform.dto.UserDto;
 import com.smarttask.taskplatform.dto.UserResponseDto;
 import com.smarttask.taskplatform.response.SuccessResponse;
 import com.smarttask.taskplatform.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ public class UserController {
         this.service = service;
     }
 
+    @Operation(summary = "Create a new user")
     @PostMapping
     public ResponseEntity<SuccessResponse<UserResponseDto>> createUser(
             @Valid @RequestBody UserDto dto) {

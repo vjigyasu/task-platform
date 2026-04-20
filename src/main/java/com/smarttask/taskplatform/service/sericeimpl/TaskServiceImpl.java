@@ -9,6 +9,8 @@ import com.smarttask.taskplatform.repository.TaskRepository;
 import com.smarttask.taskplatform.repository.UserRepository;
 import com.smarttask.taskplatform.service.TaskService;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @CacheEvict(value = "tasks", allEntries = true)
     public TaskResponseDto createTask(TaskDto dto) {
 
         Task task = mapper.map(dto, Task.class);
@@ -46,6 +49,10 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
+    @Cacheable(
+            value = "tasks",
+            key = "#page + '-' + #size + '-' + #sortBy"
+    )
     public Page<TaskResponseDto> getTasks(int page, int size, String sortBy) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -57,6 +64,7 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
+    @CacheEvict(value = "tasks", allEntries = true)
     public TaskResponseDto updateTask(UUID id, TaskDto dto) {
 
         Task task = taskRepo.findById(id)
